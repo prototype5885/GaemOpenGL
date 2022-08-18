@@ -26,8 +26,11 @@ int main()
 	// tell GLFW what version of opengl we use (3.3)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	// tell GLFW we use core profile of opengl
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	// tell GLFW what opengl profile we want
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); // compatibility mode gives more fps idk
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
 	GLfloat vertices[] =
 	{
@@ -37,7 +40,10 @@ int main()
 	};
 
 	// create GLFWwindow
-	GLFWwindow* window = glfwCreateWindow(1000, 1000, "XDDDD", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 800, "XDDDD", NULL, NULL);
+	// disables vsync
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(0);
 
 	// checks if there is error
 	if (window == NULL)
@@ -54,7 +60,7 @@ int main()
 
 
 	// specify the opengl area in the window
-	glViewport(0, 0, 1000, 1000);
+	glViewport(0, 0, 800, 800);
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
