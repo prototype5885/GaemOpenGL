@@ -31,12 +31,12 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); // compatibility mode gives more fps idk
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
+	// vertic es coordinates
 	GLfloat vertices[] =
 	{
-		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower left corner
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // lower right corner
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // upper corner
 	};
 
 	// create GLFWwindow
@@ -63,23 +63,29 @@ int main()
 	// specify the opengl area in the window
 	glViewport(0, 0, 800, 800);
 
+	// create vertex shader object and get its reference
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	// attach vertex shader source to the vertex shader object
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	// compile the vertex shader
 	glCompileShader(vertexShader);
 
+	//same as above but for fragment shader
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
+	// create shader program object and get its reference
 	GLuint shaderProgram = glCreateProgram();
-
+	// attach the vertex and fragment shaders to the shader program
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
+	// wrap-up/link all the shaders together into the shader program
 	glLinkProgram(shaderProgram);
 
+	// delete now useless shader objects
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-
 
 	GLuint VAO, VBO;
 
