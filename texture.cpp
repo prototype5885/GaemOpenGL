@@ -27,7 +27,7 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 
 }
 
-void Texture::texUnit(Shader shader, const char* uniform, GLuint unit)
+void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 {
 	GLuint texUni = glGetUniformLocation(shader.ID, "tex0");
 	shader.Activate();
