@@ -1,28 +1,40 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include<stb/stb_image.h>
+#include<glm/glm.hpp>
+#include<glm/gtc/matrix_transform.hpp>
+#include<glm/gtc/type_ptr.hpp>
 
 #include"texture.h"
-#include<stb/stb_image.h>
+
 #include"shaderClass.h"
 #include"VAO.h"
 #include"VAO.h"
 #include"EBO.h"
 
+const unsigned int width = 800;
+const unsigned int height = 800;
+
 // vertices and coordinates
 GLfloat vertices[] =
 {
-	//		COORDINATES	  /		 COLORS       /   UV map?
-	-0.5f,	-0.5f,	0.0f,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// lower left corner
-	-0.5f,	0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 1.0f,	// upper left corner
-	0.5f,	0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	1.0f, 1.0f,	// upper right corner
-	0.5f,	-0.5f,	0.0f,	1.0f, 1.0f, 1.0f,	1.0f, 0.0f	// lower left corner
+	//		COORDINATES	  /		    COLORS        /		UV map
+	-0.5f,	0.0f,	0.5f,	1.0f,	1.0f,	1.0f,	0.0f,	0.0f,
+	-0.5f,	0.0f,	-0.5f,	1.0f,	1.0f,	1.0f,	5.0f,	0.0f,
+	0.5f,	0.0f,	-0.5f,	1.0f,	1.0f,	1.0f,	0.0f,	0.0f,
+	0.5f,	0.0f,	0.5f,	1.0f,	1.0f,	1.0f,	5.0f,	0.0f,
+	0.0f,	0.8f,	0.0f,	1.0f,	1.0f,	1.0f,	2.5f,	5.0f
 };
 
 GLuint indices[] =
 {
-	0, 2, 1, // upper triangle
-	0, 3, 2  // lower triangle
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
 };
 
 int main() 
@@ -39,7 +51,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// create GLFWwindow
-	GLFWwindow* window = glfwCreateWindow(800, 800, "XDDDD", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "XDDDD", NULL, NULL);
 
 	// checks if there is error
 	if (window == NULL)
@@ -53,13 +65,13 @@ int main()
 	glfwMakeContextCurrent(window);
 
 	// disables vsync
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 
 	// load GLAD
 	gladLoadGL();
 
 	// specify the opengl area in the window
-	glViewport(0, 0, 800, 800);
+	glViewport(0, 0, width, height);
 
 	Shader shaderProgram("default.vert", "default.frag");
 
@@ -86,23 +98,58 @@ int main()
 
 	Texture modeus("modeus_d.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
 
+	// variables to rotate the object
+	float rotation = 0.0f;
+	double prevTime = glfwGetTime();
+
+	// enables depth buffer
+	glEnable(GL_DEPTH_TEST);
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// specify background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		// clean the back buffer and assign a new color to it
-		glClear(GL_COLOR_BUFFER_BIT);
+		// clean the back buffer and depth buffer
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// tell the opengl which shader program we want to use
 		shaderProgram.Activate();
+
+		// simple timer
+		double crntTime = glfwGetTime();
+		if (crntTime - prevTime >= 1 / 60)
+		{
+			rotation += 0.5f;
+			prevTime = crntTime;
+		}
+
+		// initializes matrixes so that they are not null matrix
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 proj = glm::mat4(1.0f);
+
+		// assigns different transformations to each matrix
+		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+		proj = glm::perspective(glm::radians(45.0f), (float)(width / height), 0.1f, 100.0f); 
+
+		// outputs the matrixes into the vertex shader
+		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+		int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
 		// assigns a value to the uniform (scale)
 		glUniform1f(uniID, 1.0f);
 		modeus.Bind();
 		// bind the VAO so openGL knows how to use it
 		VAO1.Bind();
 		// draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
 		// swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
 		// take core of all GLFW events
