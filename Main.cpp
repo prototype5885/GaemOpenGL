@@ -12,7 +12,7 @@
 // vertices and coordinates
 GLfloat vertices[] =
 {
-	//		COORDINATES	  /		 COLORS
+	//		COORDINATES	  /		 COLORS       /   UV map?
 	-0.5f,	-0.5f,	0.0f,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// lower left corner
 	-0.5f,	0.5f,	0.0f,	0.0f, 1.0f, 0.0f,	0.0f, 1.0f,	// upper left corner
 	0.5f,	0.5f,	0.0f,	0.0f, 0.0f, 1.0f,	1.0f, 1.0f,	// upper right corner
@@ -97,7 +97,7 @@ int main()
 		// tell the opengl which shader program we want to use
 		shaderProgram.Activate();
 		// assigns a value to the uniform (scale)
-		glUniform1f(uniID, 0.5f);
+		glUniform1f(uniID, 1.0f);
 		modeus.Bind();
 		// bind the VAO so openGL knows how to use it
 		VAO1.Bind();
