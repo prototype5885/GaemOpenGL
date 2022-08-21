@@ -14,7 +14,7 @@ uniform mat4 camMatrix;
 uniform mat4 model;
 uniform mat4 translation;
 uniform mat4 rotation;
-uniofmr mat4 scale;
+uniform mat4 scale;
 
 
 void main()

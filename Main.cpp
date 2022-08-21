@@ -72,7 +72,7 @@ int main()
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// Load in a model
-	Model model("models/test.gltf");
+	Model model("models/scene.gltf");
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
