@@ -14,6 +14,7 @@ out vec3 Normal;
 out vec3 crntPos;
 
 uniform mat4 camMatrix;
+uniform mat4 model;
 
 void main()
 {

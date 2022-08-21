@@ -9,96 +9,105 @@ Camera::Camera(int width, int height, glm::vec3 position)
 
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
-	// initializes matrixes since otherwise they will be the null matrix
+	// Initializes matrices since otherwise they will be the null matrix
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 
-	// makes camera look in the right direction from the right position
+	// Makes camera look in the right direction from the right position
 	view = glm::lookAt(Position, Position + Orientation, Up);
-	// perspective view
-	projection = glm::perspective(glm::radians(FOVdeg), (float)(width / height), nearPlane, farPlane);
 
+	// Adds perspective to the scene
+	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
+
+	// Sets new camera matrix
 	cameraMatrix = projection * view;
-
 }
 
 void Camera::Matrix(Shader& shader, const char* uniform)
 {
-	// exports the camera matrix to the vertex shader
+	// Exports camera matrix
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
 void Camera::Inputs(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	// keyboard input
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // forward
 	{
-		Position += speed * Orientation;
+		Position += speed * Orientation; 
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left
 	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+		Position += speed * -glm::normalize(glm::cross(Orientation, Up)); 
 	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
 	{
 		Position += speed * -Orientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right
 	{
 		Position += speed * glm::normalize(glm::cross(Orientation, Up));
 	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // up
 	{
 		Position += speed * Up;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // down
 	{
 		Position += speed * -Up;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // slower start
 	{
 		speed = 0.04f;
 	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) // slower end
 	{
 		speed = 0.1f;
 	}
-
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	// mouse input
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // on mouse press
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); 	// hides mouse cursor
 
+		// Prevents camera from jumping on the first click
 		if (firstClick)
 		{
 			glfwSetCursorPos(window, (width / 2), (height / 2));
 			firstClick = false;
 		}
-		// stores the coordinates of the cursor
+
+		// Stores the coordinates of the cursor
 		double mouseX;
 		double mouseY;
-		// fetches the coordinates of the cursor
+
+		// Fetches the coordinates of the cursor
 		glfwGetCursorPos(window, &mouseX, &mouseY);
-		// normalizes and shifts the coordinates of the cursor such that they being in the middle of the screen
-		// and then "transforms" them into degrees
+
+		// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
+		// and then "transforms" them into degrees 
 		float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
-		float rotY = sensitivity * (float)(mouseX - (height / 2)) / height;
+		float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
 		
-		// calculates upcoming vertical change in the orientation
+		// Calculates upcoming vertical change in the Orientation
 		glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
 		
-		// decides whether or not the next vertical orientation is legal or not
-		if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) or glm::angle(newOrientation, -Up) <= glm::radians(5.0f)));
+		// Decides whether or not the next vertical Orientation is legal or not
+		if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) or glm::angle(newOrientation, -Up) <= glm::radians(5.0f)))
 		{
 			Orientation = newOrientation;
 		}
-		// rotates the orientation left and right
+
+		// Rotates the Orientation left and right
 		Orientation = glm:: rotate(Orientation, glm::radians(-rotY), Up);
 
-		// sets the mouse cursor to the middle of the screen
+		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 		glfwSetCursorPos(window, (width / 2), (height / 2));
 	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) // on mosue release
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // unhides mouse cursor
+
+		// Makes sure the next time the camera looks around it doesn't jump
 		firstClick = true;
 	}
 }
