@@ -164,10 +164,10 @@ int main()
 	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
 	// Texture
-	Texture texture("textures/planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-	texture.texUnit(shaderProgram, "tex0", 0);
-	Texture specular("textures/planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
-	specular.texUnit(shaderProgram, "tex1", 1);
+	Texture planksTex("textures/planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	planksTex.texUnit(shaderProgram, "tex0", 0);
+	Texture planksSpec("textures/planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+	planksSpec.texUnit(shaderProgram, "tex1", 1);
 
 	// enables depth buffer
 	glEnable(GL_DEPTH_TEST);
@@ -200,8 +200,8 @@ int main()
 		camera.Matrix(shaderProgram, "camMatrix");
 
 		// binds texture so that it appears in rendering
-		texture.Bind();
-		specular.Bind();
+		planksTex.Bind();
+		planksSpec.Bind();
 
 		// bind the VAO so openGL knows how to use it
 		VAO1.Bind();
@@ -231,7 +231,8 @@ int main()
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();
-	texture.Delete();
+	planksTex.Delete();
+	planksSpec.Delete();
 	shaderProgram.Delete();
 	lightVAO.Delete();
 	lightVBO.Delete();
