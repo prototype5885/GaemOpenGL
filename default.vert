@@ -11,6 +11,7 @@ out vec3 color;
 out vec2 texCoord;
 
 out vec3 Normal;
+
 out vec3 crntPos;
 
 uniform mat4 camMatrix;
