@@ -83,4 +83,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\planksSpec.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\modeus_d.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\planks.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

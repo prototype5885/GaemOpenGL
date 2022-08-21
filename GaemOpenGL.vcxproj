@@ -43,6 +43,11 @@
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\modeus_d.png" />
+    <Image Include="textures\planks.png" />
+    <Image Include="textures\planksSpec.png" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
