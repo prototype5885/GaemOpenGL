@@ -107,16 +107,16 @@
     <LibraryPath>F:\coding\c++\GaemOpenGL\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>F:\coding\c++\GaemOpenGL\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\coding\c++\GaemOpenGL\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\coding\c++\GaemOpenGL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\coding\c++\GaemOpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>F:\coding\c++\GaemOpenGL\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>F:\coding\c++\GaemOpenGL\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>F:\coding\c++\GaemOpenGL\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\coding\c++\GaemOpenGL\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\coding\c++\GaemOpenGL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\coding\c++\GaemOpenGL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
