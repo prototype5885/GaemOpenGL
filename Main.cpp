@@ -3,36 +3,13 @@
 #include"Model.h"
 
 
-const unsigned int width = 1920;
-const unsigned int height = 1080;
+int width = 1920;
+int height = 1080;
 
-GLfloat lightVertices[] =
-{ //     COORDINATES     //
-	-0.1f, -0.1f,  0.1f,
-	-0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f,  0.1f,
-	-0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f,  0.1f
-};
+unsigned int samples = 0;
 
-GLuint lightIndices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-	0, 4, 7,
-	0, 7, 3,
-	3, 7, 6,
-	3, 6, 2,
-	2, 6, 5,
-	2, 5, 1,
-	1, 5, 4,
-	1, 4, 0,
-	4, 5, 6,
-	4, 6, 7
-};
+
+
 
 int main() 
 {
@@ -48,6 +25,7 @@ int main()
 	// tell GLFW what version of opengl we have/use (3.3 in this case)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_SAMPLES, samples);
 
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -69,14 +47,13 @@ int main()
 	// introduce the window into the current context
 	glfwMakeContextCurrent(window);
 
-	// disables vsync
-	glfwSwapInterval(1);
+
 
 	// load GLAD
 	gladLoadGL();
 
-	// specify the opengl area in the window
-	glViewport(0, 0, width, height);
+
+
 
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
@@ -93,29 +70,87 @@ int main()
 
 	// enables depth buffer
 	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+
+	glEnable(GL_MULTISAMPLE);
+
+	// face culling
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CW);
 
 	// creates camera object
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// Load in a model
-	Model model("models/modeus.gltf");
+	//Model ground("models/ground/scene.gltf");
+	//Model trees("models/trees/scene.gltf");
+	Model modeus("models/modeus/modeus.gltf");
+
+	float deltaTime;
+	float lastFrame = 0.0;
+	float currentFrame = 0.0;
+	unsigned int counter = 0;
+
+	float deltaTime60;
+	float lastFrame60 = 0.0;
+	unsigned int counter60 = 0;
+
+
+	// disables vsync
+	glfwSwapInterval(0);
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		glfwGetWindowSize(window, &height, &width);
+
+		// specify the opengl area in the window
+		glViewport(0, 0, height, width);
+
+		// runs things 1/2 of the second
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		counter++;
+
+		if (deltaTime >= 1.0 / 2.0)
+		{
+			std::string FPS = std::to_string((1.0 / deltaTime) * counter);
+			std::string ms = std::to_string((deltaTime / counter) * 1000);
+			std::string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
+			glfwSetWindowTitle(window, newTitle.c_str());
+			lastFrame = currentFrame;
+			counter = 0;
+		}
+
+		// runs things 1/60 of the second
+		deltaTime60 = currentFrame - lastFrame60;
+		counter60++;
+
+		if (deltaTime60 >= 1.0 / 60.0)
+		{
+			lastFrame60 = currentFrame;
+			counter60 = 0;
+
+			// handles camera inputs
+			camera.Inputs(window);
+		}
+		
+
 		// specify background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
 		// clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// handles camera inputs
-		camera.Inputs(window);
+
 
 		// updates and exports the camera matrix to the vertex shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-		model.Draw(shaderProgram, camera);
+		//ground.Draw(shaderProgram, camera);
+		//trees.Draw(shaderProgram, camera);
+		modeus.Draw(shaderProgram, camera);
 
 		// swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
