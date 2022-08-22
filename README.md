@@ -2,9 +2,7 @@
 
 c++ program running openGL
 
-
 included stuff:
-
 
 glad, https://glad.dav1d.de/
 GLFW, https://www.glfw.org/
