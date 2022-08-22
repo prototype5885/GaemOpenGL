@@ -2,14 +2,10 @@
 
 #include"Model.h"
 
-
 int width = 1920;
 int height = 1080;
 
 unsigned int samples = 0;
-
-
-
 
 int main() 
 {
@@ -47,13 +43,8 @@ int main()
 	// introduce the window into the current context
 	glfwMakeContextCurrent(window);
 
-
-
 	// load GLAD
 	gladLoadGL();
-
-
-
 
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
