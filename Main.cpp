@@ -2,6 +2,11 @@
 
 #include"Model.h"
 
+// using declartion for cout, endl and string
+using std::cout;
+using std::endl;
+using std::string;
+
 int width = 1920;
 int height = 1080;
 
@@ -35,7 +40,7 @@ int main()
 	// checks if there is error
 	if (window == NULL)
 	{
-		std::cout << "Fail" << std::endl;
+		cout << "Fail" << endl;
 		glfwTerminate();
 		return -1;
 	}
@@ -76,7 +81,10 @@ int main()
 	// Load in a model
 	//Model ground("models/ground/scene.gltf");
 	//Model trees("models/trees/scene.gltf");
-	Model modeus("models/modeus/modeus.gltf");
+	//Model modeus("models/modeus/modeus.gltf");
+	Model base("models/godottest/base.gltf");
+	Model basewall("models/godottest/basewall.gltf");
+	Model modeus("models/godottest/modeus.gltf");
 
 	float deltaTime;
 	float lastFrame = 0.0;
@@ -88,8 +96,8 @@ int main()
 	unsigned int counter60 = 0;
 
 
-	// disables vsync
-	glfwSwapInterval(0);
+	// vsync
+	glfwSwapInterval(1);
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
@@ -106,46 +114,43 @@ int main()
 
 		if (deltaTime >= 1.0 / 2.0)
 		{
-			std::string FPS = std::to_string((1.0 / deltaTime) * counter);
-			std::string ms = std::to_string((deltaTime / counter) * 1000);
-			std::string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
+			string FPS = std::to_string((1.0 / deltaTime) * counter);
+			string ms = std::to_string((deltaTime / counter) * 1000);
+			string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
 			glfwSetWindowTitle(window, newTitle.c_str());
 			lastFrame = currentFrame;
 			counter = 0;
+			
 		}
-
+		camera.Inputs(window);
 		// runs things 1/60 of the second
-		deltaTime60 = currentFrame - lastFrame60;
-		counter60++;
+		//deltaTime60 = currentFrame - lastFrame60;
+		//counter60++;
 
-		if (deltaTime60 >= 1.0 / 60.0)
-		{
-			lastFrame60 = currentFrame;
-			counter60 = 0;
+		//if (deltaTime60 >= 1.0 / 60.0)
+		//{
+		//	lastFrame60 = currentFrame;
+		//	counter60 = 0;
 
-			// handles camera inputs
-			camera.Inputs(window);
-		}
+		//	// handles camera inputs
+		//	camera.Inputs(window);
+		//}
 		
-
 		// specify background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-
 		// clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
 		// updates and exports the camera matrix to the vertex shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
 		//ground.Draw(shaderProgram, camera);
 		//trees.Draw(shaderProgram, camera);
+		base.Draw(shaderProgram, camera);
+		basewall.Draw(shaderProgram, camera);
 		modeus.Draw(shaderProgram, camera);
 
 		// swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
-
 		// take core of all GLFW events
 		glfwPollEvents();
 	}
