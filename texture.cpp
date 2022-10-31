@@ -36,11 +36,11 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 		(
 			GL_TEXTURE_2D,
 			0,
-			GL_RGBA,
+			GL_RGB,
 			widthImg,
 			heightImg,
 			0,
-			GL_RGBA,
+			GL_RGB,
 			GL_UNSIGNED_BYTE,
 			bytes
 		);
@@ -49,7 +49,7 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 		(
 			GL_TEXTURE_2D,
 			0,
-			GL_RGBA,
+			GL_RGB,
 			widthImg,
 			heightImg,
 			0,
@@ -62,7 +62,7 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 		(
 			GL_TEXTURE_2D,
 			0,
-			GL_RGBA,
+			GL_RGB,
 			widthImg,
 			heightImg,
 			0,

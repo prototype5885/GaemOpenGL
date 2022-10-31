@@ -10,7 +10,7 @@ using std::string;
 int width = 1920;
 int height = 1080;
 
-unsigned int samples = 0;
+unsigned int AAsamples = 0;
 
 int main() 
 {
@@ -26,13 +26,15 @@ int main()
 	// tell GLFW what version of opengl we have/use (3.3 in this case)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_SAMPLES, samples);
+	glfwWindowHint(GLFW_SAMPLES, AAsamples);
 
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// creates windowed GLFWwindow
 	GLFWwindow* window = glfwCreateWindow(width, height, "XDDDD", NULL, NULL);
+
+
 
 	// creates fullscreen GLFW window
 	//GLFWwindow* window = glfwCreateWindow(width, height, "XDDDD", glfwGetPrimaryMonitor(), NULL);
@@ -51,12 +53,15 @@ int main()
 	// load GLAD
 	gladLoadGL();
 
+	// specify the opengl area in the window
+	glViewport(0, 0, width, height);
+
 	// Generates Shader object using shaders default.vert and default.frag
 	Shader shaderProgram("default.vert", "default.frag");
 
 	// Take care of all the light related things
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 lightPos = glm::vec3(2.5f, 0.5f, 3.5f);
+	glm::vec3 lightPos = glm::vec3(2.5f, 2.5f, 3.5f);
 	glm::mat4 lightModel = glm::mat4(1.0f);
 	lightModel = glm::translate(lightModel, lightPos);
 
@@ -79,9 +84,6 @@ int main()
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// Load in a model
-	//Model ground("models/ground/scene.gltf");
-	//Model trees("models/trees/scene.gltf");
-	//Model modeus("models/modeus/modeus.gltf");
 	Model base("models/godottest/base.gltf");
 	Model basewall("models/godottest/basewall.gltf");
 	Model modeus("models/godottest/modeus.gltf");
@@ -91,9 +93,9 @@ int main()
 	float currentFrame = 0.0;
 	unsigned int counter = 0;
 
-	float deltaTime60;
-	float lastFrame60 = 0.0;
-	unsigned int counter60 = 0;
+	//float deltaTime60;
+	//float lastFrame60 = 0.0;
+	//unsigned int counter60 = 0;
 
 
 	// vsync
@@ -102,10 +104,6 @@ int main()
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwGetWindowSize(window, &height, &width);
-
-		// specify the opengl area in the window
-		glViewport(0, 0, height, width);
 
 		// runs things 1/2 of the second
 		currentFrame = glfwGetTime();
@@ -143,8 +141,6 @@ int main()
 		// updates and exports the camera matrix to the vertex shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-		//ground.Draw(shaderProgram, camera);
-		//trees.Draw(shaderProgram, camera);
 		base.Draw(shaderProgram, camera);
 		basewall.Draw(shaderProgram, camera);
 		modeus.Draw(shaderProgram, camera);
