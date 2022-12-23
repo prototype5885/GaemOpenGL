@@ -1,24 +1,38 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 
 #include"Model.h"
 
-// using declartion for cout, endl and string
-using std::cout;
-using std::endl;
-using std::string;
+#include <iostream>
+#include <fstream>  
 
-int width = 1920;
-int height = 1080;
+
+
+// using declartion for cout, endl and string
+using namespace std;
+//using std::cout;
+//using std::endl;
+//using std::string;
+
+unsigned int width;
+unsigned int height;
+
+unsigned int vsync;
+unsigned int fullscreen;
 
 unsigned int AAsamples = 0;
 
-int main() 
+float deltaTime;
+float lastFrame = 0.0;
+float currentFrame = 0.0;
+unsigned int counter = 0;
+
+void game()
 {
 	// obvious what it does
-	void HideConsole();
-	{
-		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
-	}
+	//void HideConsole();
+	//{
+	//	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+	//}
 
 	// Initialize GLFW
 	glfwInit();
@@ -31,20 +45,25 @@ int main()
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// creates windowed GLFWwindow
-	GLFWwindow* window = glfwCreateWindow(width, height, "XDDDD", NULL, NULL);
+	GLFWwindow* window;
 
-
-
-	// creates fullscreen GLFW window
-	//GLFWwindow* window = glfwCreateWindow(width, height, "XDDDD", glfwGetPrimaryMonitor(), NULL);
+	if (fullscreen)
+	{
+		// creates windowed GLFWwindow
+		window = glfwCreateWindow(width, height, "XDDDD", glfwGetPrimaryMonitor(), NULL);
+	}
+	else
+	{
+		// creates fullscreen GLFW window
+		window = glfwCreateWindow(width, height, "XDDDD", NULL, NULL);
+	}
 
 	// checks if there is error
 	if (window == NULL)
 	{
 		cout << "Fail" << endl;
 		glfwTerminate();
-		return -1;
+		//return -1;
 	}
 
 	// introduce the window into the current context
@@ -57,7 +76,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 	// Generates Shader object using shaders default.vert and default.frag
-	Shader shaderProgram("default.vert", "default.frag");
+	Shader shaderProgram("shaders/default.vert", "shaders/default.frag");
 
 	// Take care of all the light related things
 	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -81,65 +100,40 @@ int main()
 	glFrontFace(GL_CW);
 
 	// creates camera object
-	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+	Camera camera(width, height, glm::vec3(0.0f, 1.65f, 3.0f));
+
 
 	// Load in a model
 	Model base("models/godottest/base.gltf");
 	Model basewall("models/godottest/basewall.gltf");
 	Model modeus("models/godottest/modeus.gltf");
 
-	float deltaTime;
-	float lastFrame = 0.0;
-	float currentFrame = 0.0;
-	unsigned int counter = 0;
-
-	//float deltaTime60;
-	//float lastFrame60 = 0.0;
-	//unsigned int counter60 = 0;
-
 
 	// vsync
-	glfwSwapInterval(1);
+	glfwSwapInterval(vsync);
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
-
-		// runs things 1/2 of the second
-		currentFrame = glfwGetTime();
+		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		counter++;
 
-		if (deltaTime >= 1.0 / 2.0)
-		{
-			string FPS = std::to_string((1.0 / deltaTime) * counter);
-			string ms = std::to_string((deltaTime / counter) * 1000);
-			string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
-			glfwSetWindowTitle(window, newTitle.c_str());
-			lastFrame = currentFrame;
-			counter = 0;
-			
-		}
-		camera.Inputs(window);
-		// runs things 1/60 of the second
-		//deltaTime60 = currentFrame - lastFrame60;
-		//counter60++;
+		string FPS = std::to_string((1.0 / deltaTime) * counter);
+		string ms = std::to_string((deltaTime / counter) * 1000);
+		string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
+		glfwSetWindowTitle(window, newTitle.c_str());
+		counter = 0;
 
-		//if (deltaTime60 >= 1.0 / 60.0)
-		//{
-		//	lastFrame60 = currentFrame;
-		//	counter60 = 0;
+		camera.Inputs(window, deltaTime);
 
-		//	// handles camera inputs
-		//	camera.Inputs(window);
-		//}
-		
 		// specify background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// updates and exports the camera matrix to the vertex shader
-		camera.updateMatrix(45.0f, 0.1f, 100.0f);
+		// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
+		camera.updateMatrix(68.0f, 0.1f, 100.0f);
 
 		base.Draw(shaderProgram, camera);
 		basewall.Draw(shaderProgram, camera);
@@ -158,5 +152,68 @@ int main()
 
 	// Terminate GLFW before ending the program
 	glfwTerminate();
+}
+
+void configFile()
+{
+	// reads config file
+	ifstream file("./config/config.cfg");
+	string cname;
+	int cvalue;
+	while (file >> cname >> cvalue)
+	{
+		if (cname == "vsync") 
+		{
+			if (cvalue != 0) 
+			{
+				vsync = 1;
+			}
+			else
+			{
+				vsync = 0;
+			}
+		}
+		if (cname == "width")
+		{
+			width = cvalue;
+		}
+		if (cname == "height")
+		{
+			height = cvalue;
+		}
+		if (cname == "fullscreen")
+		{
+			if (cvalue != 0)
+			{
+				fullscreen = 1;
+			}
+			else
+			{
+				fullscreen = 0;
+			}
+		}
+	}
+	file.close();
+}
+
+void checkIfConfigExists() 
+{
+	// creates config file if it doesnt exist
+	ifstream file("./config/config.cfg");
+	if (!file)
+	{
+		ofstream file("./config/config.cfg");
+		file << "vsync 0\nwidth 1920\nheight 1080\nfullscreen 0" << endl;
+		file.close();
+	}
+	// goes to read config file
+	configFile();
+}
+
+int main() 
+{
+	checkIfConfigExists();
+	game();
 	return 0;
 }
+

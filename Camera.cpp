@@ -29,45 +29,45 @@ void Camera::Matrix(Shader& shader, const char* uniform)
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
-void Camera::Inputs(GLFWwindow* window)
+void Camera::Inputs(GLFWwindow* window, float deltaTime)
 {
 
 	// keyboard input
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // forward
 	{
-		Position += speed * Orientation; 
+		Position += deltaTime * speed * Orientation;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left
 	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up)); 
+		Position += deltaTime * speed * -glm::normalize(glm::cross(Orientation, Up));
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
 	{
-		Position += speed * -Orientation;
+		Position += deltaTime * speed * -Orientation;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right
 	{
-		Position += speed * glm::normalize(glm::cross(Orientation, Up));
+		Position += deltaTime * speed * glm::normalize(glm::cross(Orientation, Up));
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // up
 	{
-		Position += speed * Up;
+		Position += deltaTime * speed * Up;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // down
 	{
-		Position += speed * -Up;
+		Position += deltaTime * speed * -Up;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // faster start
 	{
-		speed = 0.1f;
+		speed = sprintSpeed;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) // faster end
 	{
-		speed = 0.05f;
+		speed = defaultSpeed;
 	}
 	// mouse input
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // on mouse press
-	{
+	//if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // on mouse press
+	//{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); 	// hides mouse cursor
 
 		// Prevents camera from jumping on the first click
@@ -103,12 +103,12 @@ void Camera::Inputs(GLFWwindow* window)
 
 		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 		glfwSetCursorPos(window, (width / 2), (height / 2));
-	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) // on mosue release
-	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // unhides mouse cursor
+	/*}*/
+	//else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) // on mouse release
+	//{
+	//	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // unhides mouse cursor
 
-		// Makes sure the next time the camera looks around it doesn't jump
-		firstClick = true;
-	}
+	//	// Makes sure the next time the camera looks around it doesn't jump
+	//	firstClick = true;
+	//}
 }

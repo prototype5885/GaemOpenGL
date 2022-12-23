@@ -32,12 +32,6 @@
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.vert" />
-    <None Include="light.frag" />
-    <None Include="light.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="EBO.h" />
     <ClInclude Include="Mesh.h" />
@@ -51,6 +45,12 @@
     <Image Include="textures\modeus_d.png" />
     <Image Include="textures\planks.png" />
     <Image Include="textures\planksSpec.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\default.frag" />
+    <None Include="shaders\default.vert" />
+    <None Include="shaders\light.frag" />
+    <None Include="shaders\light.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -172,7 +172,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <Optimization>MaxSpeed</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>

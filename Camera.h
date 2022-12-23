@@ -28,7 +28,9 @@ class Camera
 		int height;
 
 		// camera speed and mouse sensitivity
-		float speed = 0.05f;
+		float defaultSpeed = 5.0f;
+		float speed = 5.0f;
+		float sprintSpeed = speed * 1.5;
 		float sensitivity = 100.0f;
 
 		// camera constructor to set up initial values
@@ -38,7 +40,7 @@ class Camera
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void Matrix(Shader& shader, const char* uniform);
 		// handles camera inputs
-		void Inputs(GLFWwindow* window);
+		void Inputs(GLFWwindow* window, float deltaTime);
 };
 
 #endif
