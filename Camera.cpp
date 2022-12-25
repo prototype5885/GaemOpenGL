@@ -35,15 +35,15 @@ void Camera::Inputs(GLFWwindow* window, float deltaTime)
 	// keyboard input
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // forward
 	{
-		Position += deltaTime * speed * Orientation;
+		Position += deltaTime * speed * horizontalOrientation;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
+	{
+		Position += deltaTime * speed * -horizontalOrientation;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left
 	{
 		Position += deltaTime * speed * -glm::normalize(glm::cross(Orientation, Up));
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
-	{
-		Position += deltaTime * speed * -Orientation;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right
 	{
@@ -85,21 +85,27 @@ void Camera::Inputs(GLFWwindow* window, float deltaTime)
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
 		// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
-		// and then "transforms" them into degrees 
+		// and then "transforms" them into degrees
 		float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
 		float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
-		
+
 		// Calculates upcoming vertical change in the Orientation
 		glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
-		
+
 		// Decides whether or not the next vertical Orientation is legal or not
 		if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) or glm::angle(newOrientation, -Up) <= glm::radians(5.0f)))
 		{
 			Orientation = newOrientation;
+
 		}
 
 		// Rotates the Orientation left and right
 		Orientation = glm:: rotate(Orientation, glm::radians(-rotY), Up);
+
+		horizontalOrientation = Orientation;
+		horizontalOrientation.y = 0.0f;
+		horizontalOrientation.g = 0.0f;
+		horizontalOrientation.t = 0.0f;
 
 		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 		glfwSetCursorPos(window, (width / 2), (height / 2));

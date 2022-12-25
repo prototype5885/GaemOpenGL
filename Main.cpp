@@ -25,6 +25,7 @@ float deltaTime;
 float lastFrame = 0.0;
 float currentFrame = 0.0;
 unsigned int counter = 0;
+float playerHeight = 1.65f;
 
 void game()
 {
@@ -100,7 +101,7 @@ void game()
 	glFrontFace(GL_CW);
 
 	// creates camera object
-	Camera camera(width, height, glm::vec3(0.0f, 1.65f, 3.0f));
+	Camera camera(width, height, glm::vec3(0.0f, playerHeight, 3.0f));
 
 
 	// Load in a model
@@ -134,6 +135,7 @@ void game()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
 		camera.updateMatrix(68.0f, 0.1f, 100.0f);
+		camera.Position.y = playerHeight;
 
 		base.Draw(shaderProgram, camera);
 		basewall.Draw(shaderProgram, camera);
