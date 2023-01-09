@@ -2,6 +2,7 @@
 
 VAO::VAO()
 {
+	glEnableVertexAttribArray(0);
 	glGenVertexArrays(1, &ID);
 }
 

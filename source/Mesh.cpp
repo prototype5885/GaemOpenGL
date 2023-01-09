@@ -26,7 +26,7 @@ Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::v
 void Mesh::Draw
 (
 	Shader& shader,
-	Camera& camera,
+	Player& camera,
 	glm::mat4 matrix,
 	glm::vec3 translation,
 	glm::quat rotation,
@@ -57,7 +57,7 @@ void Mesh::Draw
 		textures[i].Bind();
 	}
 	// Take care of the camera Matrix
-	glUniform3f(glGetUniformLocation(shader.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+	glUniform3f(glGetUniformLocation(shader.ID, "camPos"), camera.CameraPosition.x, camera.CameraPosition.y, camera.CameraPosition.z);
 	camera.Matrix(shader, "camMatrix");
 
 	// Initialize matrices

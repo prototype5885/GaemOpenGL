@@ -12,14 +12,14 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O3" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-lglfw3" />
-					<Add library="lib/codeblockslib/libglfw3dll.a" />
-					<Add directory="lib/codeblockslib" />
+					<Add library="lib64/codeblockslib/libglfw3dll.a" />
+					<Add directory="lib64/codeblockslib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -27,28 +27,29 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Camera.cpp" />
-		<Unit filename="Camera.h" />
-		<Unit filename="EBO.cpp" />
-		<Unit filename="EBO.h" />
-		<Unit filename="Main.cpp" />
-		<Unit filename="Mesh.cpp" />
-		<Unit filename="Mesh.h" />
-		<Unit filename="Model.h" />
-		<Unit filename="Texture.cpp" />
-		<Unit filename="Texture.h" />
-		<Unit filename="VAO.cpp" />
-		<Unit filename="VAO.h" />
-		<Unit filename="VBO.ccp" />
-		<Unit filename="VBO.cpp" />
-		<Unit filename="VBO.h" />
-		<Unit filename="glad.c">
+		<Unit filename="source/Camera.cpp" />
+		<Unit filename="source/Camera.h" />
+		<Unit filename="source/EBO.cpp" />
+		<Unit filename="source/EBO.h" />
+		<Unit filename="source/Main.cpp" />
+		<Unit filename="source/Mesh.cpp" />
+		<Unit filename="source/Mesh.h" />
+		<Unit filename="source/Model.h" />
+		<Unit filename="source/Player.cpp" />
+		<Unit filename="source/Player.h" />
+		<Unit filename="source/Texture.cpp" />
+		<Unit filename="source/Texture.h" />
+		<Unit filename="source/VAO.cpp" />
+		<Unit filename="source/VAO.h" />
+		<Unit filename="source/VBO.cpp" />
+		<Unit filename="source/VBO.h" />
+		<Unit filename="source/glad.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="model.cpp" />
-		<Unit filename="shaderClass.cpp" />
-		<Unit filename="shaderClass.h" />
-		<Unit filename="stb.cpp" />
+		<Unit filename="source/model.cpp" />
+		<Unit filename="source/shaderClass.cpp" />
+		<Unit filename="source/shaderClass.h" />
+		<Unit filename="source/stb.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

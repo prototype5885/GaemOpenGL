@@ -1,9 +1,14 @@
 ﻿#include <Windows.h>
 
-#include"Model.h"
+#include "Model.h"
 
 #include <iostream>
-#include <fstream>  
+#include <fstream>
+
+#include "OBJ_Loader.h"
+
+#include"Player.h"
+
 
 
 
@@ -21,11 +26,14 @@ unsigned int fullscreen;
 
 unsigned int AAsamples = 0;
 
-float deltaTime;
-float lastFrame = 0.0;
-float currentFrame = 0.0;
-unsigned int counter = 0;
+
+
 float playerHeight = 1.65f;
+
+
+
+GLFWwindow* window;
+
 
 void game()
 {
@@ -46,7 +54,7 @@ void game()
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window;
+
 
 	if (fullscreen)
 	{
@@ -100,9 +108,8 @@ void game()
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CW);
 
-	// creates camera object
-	Camera camera(width, height, glm::vec3(0.0f, playerHeight, 3.0f));
-
+	// creates player
+	Player player(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
 
 	// Load in a model
 	Model base("models/godottest/base.gltf");
@@ -113,33 +120,51 @@ void game()
 	// vsync
 	glfwSwapInterval(vsync);
 
+	// declares stuff for calculating delta
+	float deltaTime;
+	float lastFrame = 0.0;
+	float currentFrame = 0.0;
+
+	// declares stuff for displaying stuff every half sec
+	double prevTime = 0.0;
+	double crntTime = 0.0;
+	double timeDiff;
+	unsigned int counter = 0;
+
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		// displays fps
+		crntTime = glfwGetTime();
+		timeDiff = crntTime - prevTime;
 		counter++;
+		if (timeDiff >= 1.0 / 2.0)
+		{
+			int fpsvalue = (1.0 / timeDiff) * counter;
+			string FPS = std::to_string(fpsvalue);
+			string newTitle = "XDDDD - " + FPS + " fps";
+			glfwSetWindowTitle(window, newTitle.c_str());
+			prevTime = crntTime;
+			counter = 0;
+		}
 
-		string FPS = std::to_string((1.0 / deltaTime) * counter);
-		string ms = std::to_string((deltaTime / counter) * 1000);
-		string newTitle = "XDDDD - " + FPS + "FPS / " + ms + "ms";
-		glfwSetWindowTitle(window, newTitle.c_str());
-		counter = 0;
+		player.Inputs(window, deltaTime);
+		// player.Inputs(window, deltaTime);
 
-		camera.Inputs(window, deltaTime);
+		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);				// specify background color
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// clean the back buffer and depth buffer
+		player.updateMatrix(68.0f, 0.1f, 100.0f);				// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
 
-		// specify background color
-		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		// clean the back buffer and depth buffer
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
-		camera.updateMatrix(68.0f, 0.1f, 100.0f);
-		camera.Position.y = playerHeight;
+		player.CameraPosition = player.PlayerPosition;			// keeps the camera attached to the player
+		player.CameraPosition.y = player.PlayerPosition.y + playerHeight; // keeps the camera height on head level
 
-		base.Draw(shaderProgram, camera);
-		basewall.Draw(shaderProgram, camera);
-		modeus.Draw(shaderProgram, camera);
+		base.Draw(shaderProgram, player);
+		basewall.Draw(shaderProgram, player);
+		modeus.Draw(shaderProgram, player);
 
 		// swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
@@ -164,9 +189,9 @@ void configFile()
 	int cvalue;
 	while (file >> cname >> cvalue)
 	{
-		if (cname == "vsync") 
+		if (cname == "vsync")
 		{
-			if (cvalue != 0) 
+			if (cvalue != 0)
 			{
 				vsync = 1;
 			}
@@ -198,7 +223,7 @@ void configFile()
 	file.close();
 }
 
-void checkIfConfigExists() 
+void checkIfConfigExists()
 {
 	// creates config file if it doesnt exist
 	ifstream file("./config/config.cfg");
@@ -212,7 +237,7 @@ void checkIfConfigExists()
 	configFile();
 }
 
-int main() 
+int main()
 {
 	checkIfConfigExists();
 	game();

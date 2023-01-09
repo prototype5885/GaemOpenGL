@@ -74,7 +74,8 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 		throw std::invalid_argument("Automatic Texture type recognition failed");
 
 	// Generates MipMaps
-	glGenerateMipmap(GL_TEXTURE_2D);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+	
 
 	// Deletes the image data as it is already in the OpenGL Texture object
 	stbi_image_free(bytes);

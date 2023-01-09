@@ -1295,10 +1295,10 @@
 	<glm/gtx/vector_angle.hpp>
 	"shaderClass.h"
 
-1660801568 f:\coding\c++\gaemopengl\include\glad\glad.h
+1673220786 f:\coding\c++\gaemopengl\include\glad\glad.h
 	<KHR/khrplatform.h>
 
-1660801568 f:\coding\c++\gaemopengl\include\khr\khrplatform.h
+1673220786 f:\coding\c++\gaemopengl\include\khr\khrplatform.h
 	<stdint.h>
 	<inttypes.h>
 	<stdint.h>
@@ -2564,4 +2564,114 @@
 
 1661106840 source:f:\coding\c++\gaemopengl\vbo.cpp
 	"VBO.h"
+
+1671990858 source:f:\coding\c++\gaemopengl\source\camera.cpp
+	"Camera.h"
+
+1671991290 f:\coding\c++\gaemopengl\source\camera.h
+	<glad/glad.h>
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<glm/gtx/rotate_vector.hpp>
+	<glm/gtx/vector_angle.hpp>
+	"shaderClass.h"
+
+1661117104 f:\coding\c++\gaemopengl\source\shaderclass.h
+	<glad/glad.h>
+	<string>
+	<fstream>
+	<sstream>
+	<iostream>
+	<cerrno>
+
+1667499366 source:f:\coding\c++\gaemopengl\source\ebo.cpp
+	"EBO.h"
+
+1661106894 f:\coding\c++\gaemopengl\source\ebo.h
+	<glad/glad.h>
+	<vector>
+
+1673220786 source:f:\coding\c++\gaemopengl\source\glad.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<glad/glad.h>
+	<windows.h>
+	<winapifamily.h>
+	<dlfcn.h>
+
+1673218922 source:f:\coding\c++\gaemopengl\source\mesh.cpp
+	"Mesh.h"
+
+1673218916 f:\coding\c++\gaemopengl\source\mesh.h
+	<string>
+	"VAO.h"
+	"EBO.h"
+	"Player.h"
+	"Texture.h"
+
+1672183796 f:\coding\c++\gaemopengl\source\vao.h
+	<glad/glad.h>
+	"VBO.h"
+
+1661106794 f:\coding\c++\gaemopengl\source\vbo.h
+	<glm/glm.hpp>
+	<glad/glad.h>
+	<vector>
+
+1661115966 f:\coding\c++\gaemopengl\source\texture.h
+	<glad/glad.h>
+	<stb/stb_image.h>
+	"shaderClass.h"
+
+1673218956 source:f:\coding\c++\gaemopengl\source\model.cpp
+	"Model.h"
+
+1673218938 f:\coding\c++\gaemopengl\source\model.h
+	<json/json.hpp>
+	"Mesh.h"
+
+1673213100 source:f:\coding\c++\gaemopengl\source\shaderclass.cpp
+	"shaderClass.h"
+
+1661013524 source:f:\coding\c++\gaemopengl\source\stb.cpp
+	<stb/stb_image.h>
+
+1673224182 source:f:\coding\c++\gaemopengl\source\texture.cpp
+	"Texture.h"
+
+1673224616 source:f:\coding\c++\gaemopengl\source\vao.cpp
+	"VAO.h"
+
+1673212058 source:f:\coding\c++\gaemopengl\source\vbo.cpp
+	"VBO.h"
+
+1673224888 source:f:\coding\c++\gaemopengl\source\main.cpp
+	"Model.h"
+	<iostream>
+	<fstream>
+	"OBJ_Loader.h"
+	"Player.h"
+
+1673224012 f:\coding\c++\gaemopengl\source\player.h
+	<glad/glad.h>
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<glm/gtx/rotate_vector.hpp>
+	<glm/gtx/vector_angle.hpp>
+	"shaderClass.h"
+
+1672274688 f:\coding\c++\gaemopengl\source\obj_loader.h
+	<iostream>
+	<vector>
+	<string>
+	<fstream>
+	<math.h>
+
+1673224038 source:f:\coding\c++\gaemopengl\source\player.cpp
+	"Player.h"
 

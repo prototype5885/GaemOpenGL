@@ -31,8 +31,11 @@
 *.app
 
 .vs
+.vscode
 x64
+win32
 Debug
-opengl46.zip
-opengl33.zip
+opengl21
+opengl33
+opengl46
 obj
