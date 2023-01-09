@@ -32,7 +32,7 @@ float playerHeight = 1.65f;
 
 
 
-GLFWwindow* window;
+
 
 
 void game()
@@ -54,7 +54,7 @@ void game()
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
+	GLFWwindow* window;
 
 	if (fullscreen)
 	{
@@ -130,6 +130,7 @@ void game()
 	double crntTime = 0.0;
 	double timeDiff;
 	unsigned int counter = 0;
+	int fpsvalue;
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
@@ -144,7 +145,7 @@ void game()
 		counter++;
 		if (timeDiff >= 1.0 / 2.0)
 		{
-			int fpsvalue = (1.0 / timeDiff) * counter;
+			fpsvalue = (1.0 / timeDiff) * counter;
 			string FPS = std::to_string(fpsvalue);
 			string newTitle = "XDDDD - " + FPS + " fps";
 			glfwSetWindowTitle(window, newTitle.c_str());
