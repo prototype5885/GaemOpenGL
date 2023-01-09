@@ -32,8 +32,6 @@ void Player::Matrix(Shader& shader, const char* uniform)
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
-
-
 void Player::Inputs(GLFWwindow* window, float deltaTime)
 {
 
@@ -84,7 +82,7 @@ void Player::Inputs(GLFWwindow* window, float deltaTime)
 	
 	glm::vec3 newOrientation = glm::rotate(CameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(CameraOrientation, Up))); // Calculates upcoming vertical change in the Orientation
 
-	if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) or glm::angle(newOrientation, -Up) <= glm::radians(5.0f))) // Decides whether or not 
+	if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) || glm::angle(newOrientation, -Up) <= glm::radians(5.0f))) // Decides whether or not 
 	{																														// the next vertical Orientation is legal or not
 		CameraOrientation = newOrientation; 
 	}
