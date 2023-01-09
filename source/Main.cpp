@@ -5,8 +5,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "OBJ_Loader.h"
-
 #include"Player.h"
 
 
@@ -29,10 +27,6 @@ unsigned int AAsamples = 0;
 
 
 float playerHeight = 1.65f;
-
-
-
-
 
 
 void game()
@@ -135,7 +129,7 @@ void game()
 	// main while loop
 	while (!glfwWindowShouldClose(window))
 	{
-		float currentFrame = glfwGetTime();
+		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -143,6 +137,7 @@ void game()
 		crntTime = glfwGetTime();
 		timeDiff = crntTime - prevTime;
 		counter++;
+
 		if (timeDiff >= 1.0 / 2.0)
 		{
 			fpsvalue = (1.0 / timeDiff) * counter;
@@ -151,11 +146,12 @@ void game()
 			glfwSetWindowTitle(window, newTitle.c_str());
 			prevTime = crntTime;
 			counter = 0;
+
 		}
 
 		player.Inputs(window, deltaTime);
-		// player.Inputs(window, deltaTime);
 
+		//draw the graphics
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);				// specify background color
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// clean the back buffer and depth buffer
 		player.updateMatrix(68.0f, 0.1f, 100.0f);				// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
