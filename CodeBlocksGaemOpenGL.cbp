@@ -12,23 +12,33 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-flto" />
 					<Add option="-O3" />
-					<Add directory="include" />
+					<Add option="-Wall" />
 				</Compiler>
 				<Linker>
+					<Add option="-flto" />
 					<Add option="-s" />
-					<Add option="-lglfw3" />
-					<Add library="lib64/codeblockslib/libglfw3dll.a" />
 					<Add directory="lib64/codeblockslib" />
 				</Linker>
+			</Target>
+			<Target title="Speed">
+				<Option output="x64/SpeedCB/CodeBlocksGaemOpenGL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="include" />
 		</Compiler>
-		<Unit filename="source/Camera.cpp" />
-		<Unit filename="source/Camera.h" />
+		<Linker>
+			<Add option="-lglfw3" />
+			<Add library="lib64/codeblockslib/libglfw3dll.a" />
+			<Add directory="lib64/codeblockslib" />
+		</Linker>
 		<Unit filename="source/EBO.cpp" />
 		<Unit filename="source/EBO.h" />
 		<Unit filename="source/Main.cpp" />
