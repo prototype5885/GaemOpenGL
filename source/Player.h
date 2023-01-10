@@ -35,7 +35,7 @@ class Player
 		// camera speed and mouse sensitivity
 		float defaultSpeed = 2.5f;
 		float speed = 2.5f;
-		float sprintSpeed = speed * 2.5f;
+		float sprintSpeedMultiplier = 5.5f;
 		float sensitivity = 100.0f;
 
 		// camera constructor to set up initial values

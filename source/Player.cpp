@@ -38,50 +38,87 @@ float lerp(float from, float to, float t)
 
 void Player::Controller(GLFWwindow* window, float deltaTime)
 {
-	float currentTime;
-	float accel;
-	
+
+
+	bool forwardheld{};
+	bool backwardheld{};
+	bool leftheld{};
+	bool rightheld{};
 
 	//keyboard input
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // forward
+
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)  // forward held
+	{ 
+		forwardheld = true;
+		PlayerPosition += deltaTime * speed * PlayerOrientation; 
+	} 
+	//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) // forward released
+	//{ 
+	//	forwardheld = false; 
+	//} 
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward held
 	{
-		currentTime = glfwGetTime();
-		accel = lerp(0.0f, 1.0f, 0.5f);
-		PlayerPosition += deltaTime * speed * accel * PlayerOrientation;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
-	{
+		//backwardheld = true;
 		PlayerPosition += deltaTime * speed * -PlayerOrientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left
-	{
-		PlayerPosition += deltaTime * speed * -glm::normalize(glm::cross(PlayerOrientation, Up));
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right
-	{
-		PlayerPosition += deltaTime * speed * glm::normalize(glm::cross(PlayerOrientation, Up));
-	}
+	//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) // backward released
+	//{ 
+	//	backwardheld = false; 
+	//} 
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left held
+	{	
+		//leftheld = true;
+		PlayerPosition += deltaTime * speed * -glm::normalize(glm::cross(PlayerOrientation, Up)); 
+	} 
+	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE) // left released
+	//{ 
+	//	leftheld = false; 
+	//} 
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right held
+	{ 
+		//rightheld = true;
+		PlayerPosition += deltaTime * speed * glm::normalize(glm::cross(PlayerOrientation, Up)); 
+	} 
+	//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE) // right released
+	//{ 
+	//	rightheld = false; 
+	//} 
+
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // up
 	{
 		PlayerPosition += deltaTime * speed * Up;
 	}
+
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // down
 	{
 		PlayerPosition += deltaTime * speed * -Up;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // faster start
+	} 
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // sprint on
 	{
-		speed = sprintSpeed;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) // faster end
+		speed = speed * sprintSpeedMultiplier;
+	} 
+
+	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) // sprint off
 	{
 		speed = defaultSpeed;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) // backward
+
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
 	{
 		PlayerPosition.y = 5.0f;
 	}
+
+	//if (forwardheld && leftheld || forwardheld && rightheld || backwardheld && leftheld ||  backwardheld || rightheld)
+	//{
+	//	speed = speed / glm::sqrt(speed);
+	//}
+	//else
+	//{
+	//	speed = defaultSpeed;
+	//}
 
 	// gravity
 	float fallspeed = 3;
