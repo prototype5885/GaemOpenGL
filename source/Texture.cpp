@@ -1,8 +1,13 @@
 #include"Texture.h"
 
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+//#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+
+
+
 Texture::Texture(const char* image, const char* texType, GLuint slot)
 {
-	// Assigns the type of the texture ot the texture object
+	// Assigns the type of the texture to the texture object
 	type = texType;
 
 	// Stores the width, height, and the number of color channels of the image
@@ -23,12 +28,14 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 	glBindTexture(GL_TEXTURE_2D, ID);
 
 	// Configures the type of algorithm that is used to make the image smaller or bigger
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Configures the way the texture repeats (if it does at all)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
 
 	// Check what type of color channels the texture has and load it accordingly
 	if (numColCh == 4)
@@ -74,7 +81,9 @@ Texture::Texture(const char* image, const char* texType, GLuint slot)
 		throw std::invalid_argument("Automatic Texture type recognition failed");
 
 	// Generates MipMaps
-	//glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
 	
 
 	// Deletes the image data as it is already in the OpenGL Texture object

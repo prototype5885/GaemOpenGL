@@ -35,18 +35,16 @@ class Player
 		// camera speed and mouse sensitivity
 		float defaultSpeed = 2.5f;
 		float speed = 2.5f;
-		float sprintSpeed = speed * 1.5;
+		float sprintSpeed = speed * 2.5f;
 		float sensitivity = 100.0f;
 
 		// camera constructor to set up initial values
 		Player(int width, int height, glm::vec3 position);
 
-		
-
 		// updates and exports the camera matrix to the vertex shader
 		void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 		void Matrix(Shader& shader, const char* uniform);
 		// handles camera inputs
-		void Inputs(GLFWwindow* window, float deltaTime);
+		void Controller(GLFWwindow* window, float deltaTime);
 };
 #endif

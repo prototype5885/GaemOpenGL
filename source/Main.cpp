@@ -26,16 +26,13 @@ unsigned int AAsamples = 0;
 
 
 
-float playerHeight = 1.65f;
+
+
 
 
 void game()
 {
-	// obvious what it does
-	//void HideConsole();
-	//{
-	//	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
-	//}
+
 
 	// Initialize GLFW
 	glfwInit();
@@ -44,6 +41,7 @@ void game()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_SAMPLES, AAsamples);
+
 
 	// tell GLFW what opengl profile we use (core here)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -95,6 +93,7 @@ void game()
 	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 
+
 	glEnable(GL_MULTISAMPLE);
 
 	// face culling
@@ -103,7 +102,7 @@ void game()
 	glFrontFace(GL_CW);
 
 	// creates player
-	Player player(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
+	Player player(width, height, glm::vec3(0.0f, 10.0f, 3.0f));
 
 	// Load in a model
 	Model base("models/godottest/base.gltf");
@@ -120,11 +119,13 @@ void game()
 	float currentFrame = 0.0;
 
 	// declares stuff for displaying stuff every half sec
-	double prevTime = 0.0;
-	double crntTime = 0.0;
-	double timeDiff;
+	float prevTime = 0.0;
+	float crntTime = 0.0;
+	float timeDiff;
 	unsigned int counter = 0;
-	int fpsvalue;
+	unsigned int fpsvalue;
+
+	float playerHeight = 1.65f;
 
 	// main while loop
 	while (!glfwWindowShouldClose(window))
@@ -149,12 +150,13 @@ void game()
 
 		}
 
-		player.Inputs(window, deltaTime);
+		player.Controller(window, deltaTime);
 
 		//draw the graphics
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);				// specify background color
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// clean the back buffer and depth buffer
 		player.updateMatrix(68.0f, 0.1f, 100.0f);				// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
+
 
 		player.CameraPosition = player.PlayerPosition;			// keeps the camera attached to the player
 		player.CameraPosition.y = player.PlayerPosition.y + playerHeight; // keeps the camera height on head level

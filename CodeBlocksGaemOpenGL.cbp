@@ -19,7 +19,7 @@
 				<Linker>
 					<Add option="-flto" />
 					<Add option="-s" />
-					<Add directory="lib64/codeblockslib" />
+					<Add directory="lib64/gcc" />
 				</Linker>
 			</Target>
 			<Target title="Speed">
@@ -36,8 +36,8 @@
 		</Compiler>
 		<Linker>
 			<Add option="-lglfw3" />
-			<Add library="lib64/codeblockslib/libglfw3dll.a" />
-			<Add directory="lib64/codeblockslib" />
+			<Add library="lib64/gcc/libglfw3dll.a" />
+			<Add directory="lib64/gcc" />
 		</Linker>
 		<Unit filename="source/EBO.cpp" />
 		<Unit filename="source/EBO.h" />

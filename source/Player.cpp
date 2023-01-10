@@ -31,14 +31,23 @@ void Player::Matrix(Shader& shader, const char* uniform)
 	// Exports camera matrix
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
-
-void Player::Inputs(GLFWwindow* window, float deltaTime)
+float lerp(float from, float to, float t)
 {
+	return (from * (1 - t) + to * t);
+}
+
+void Player::Controller(GLFWwindow* window, float deltaTime)
+{
+	float currentTime;
+	float accel;
+	
 
 	//keyboard input
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) // forward
 	{
-		PlayerPosition += deltaTime * speed * PlayerOrientation;
+		currentTime = glfwGetTime();
+		accel = lerp(0.0f, 1.0f, 0.5f);
+		PlayerPosition += deltaTime * speed * accel * PlayerOrientation;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward
 	{
@@ -69,6 +78,33 @@ void Player::Inputs(GLFWwindow* window, float deltaTime)
 		speed = defaultSpeed;
 	}
 
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) // backward
+	{
+		PlayerPosition.y = 5.0f;
+	}
+
+	// gravity
+	float fallspeed = 3;
+	float velocity;
+
+	bool grounded{};
+	bool fallStarted{};
+	bool fallEnded{};
+
+	if (!grounded && PlayerPosition.y < 0.0f)
+	{
+		PlayerPosition.y = 0.0f;
+		grounded = true;
+	}
+	else
+	{
+		grounded = false;
+		speed = defaultSpeed / 2;
+		PlayerPosition += deltaTime * fallspeed * -Up;
+	}
+
+
+
 	// mouse input new
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); 	// hides mouse cursor
 
@@ -82,16 +118,13 @@ void Player::Inputs(GLFWwindow* window, float deltaTime)
 	
 	glm::vec3 newOrientation = glm::rotate(CameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(CameraOrientation, Up))); // Calculates upcoming vertical change in the Orientation
 
-	if (!((glm::angle(newOrientation, Up) <= glm::radians(5.0f)) || glm::angle(newOrientation, -Up) <= glm::radians(5.0f))) // Decides whether or not 
+	if (!((glm::angle(newOrientation, Up) <= glm::radians(10.0f)) || glm::angle(newOrientation, -Up) <= glm::radians(10.0f))) // Decides whether or not 
 	{																														// the next vertical Orientation is legal or not
 		CameraOrientation = newOrientation; 
 	}
 
 	PlayerOrientation = glm::rotate(PlayerOrientation, glm::radians(-rotY), Up); // Rotates the Orientation left and right
 	CameraOrientation = glm::rotate(CameraOrientation, glm::radians(-rotY), Up); // some temporary fix so camera rotates with the body
-
-
-	
 
 	glfwSetCursorPos(window, (width / 2), (height / 2)); // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 	// mouse input old
