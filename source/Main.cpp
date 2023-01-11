@@ -102,7 +102,7 @@ void game()
 	glFrontFace(GL_CW);
 
 	// creates player
-	Player player(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
+	Player player(width, height, glm::vec3(0.0f, 1.0f, 3.0f));
 
 	// Load in a model
 	Model base("models/godottest/base.gltf");

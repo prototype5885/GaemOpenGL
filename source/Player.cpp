@@ -1,4 +1,6 @@
 #include"Player.h"
+#include <iostream>
+#include <cmath>
 
 Player::Player(int width, int height, glm::vec3 position)
 {
@@ -31,59 +33,42 @@ void Player::Matrix(Shader& shader, const char* uniform)
 	// Exports camera matrix
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
-float lerp(float from, float to, float t)
+
+bool checkCollision(glm::vec3(playerp))
 {
-	return (from * (1 - t) + to * t);
+	if (playerp.y >= 0.0f)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void Player::Controller(GLFWwindow* window, float deltaTime)
 {
-
-
-	bool forwardheld{};
-	bool backwardheld{};
-	bool leftheld{};
-	bool rightheld{};
-
 	//keyboard input
-
-
+	//playerSpeed = PlayerPosition - previousPlayerPosition;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)  // forward held
-	{ 
-		forwardheld = true;
-		PlayerPosition += deltaTime * speed * PlayerOrientation; 
-	} 
-	//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) // forward released
-	//{ 
-	//	forwardheld = false; 
-	//} 
+	{
+		if (accel > 1.0f) accel = 1.0f;
+		accel += 3.0f * deltaTime;
+		PlayerPosition += deltaTime * speed * accel * PlayerOrientation;
+	}
+
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) // backward held
 	{
-		//backwardheld = true;
 		PlayerPosition += deltaTime * speed * -PlayerOrientation;
 	}
-	//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) // backward released
-	//{ 
-	//	backwardheld = false; 
-	//} 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) // left held
-	{	
+	{
 		//leftheld = true;
-		PlayerPosition += deltaTime * speed * -glm::normalize(glm::cross(PlayerOrientation, Up)); 
-	} 
-	//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE) // left released
-	//{ 
-	//	leftheld = false; 
-	//} 
+		PlayerPosition += deltaTime * speed * -glm::normalize(glm::cross(PlayerOrientation, Up));
+	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) // right held
-	{ 
+	{
 		//rightheld = true;
-		PlayerPosition += deltaTime * speed * glm::normalize(glm::cross(PlayerOrientation, Up)); 
-	} 
-	//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE) // right released
-	//{ 
-	//	rightheld = false; 
-	//} 
+		PlayerPosition += deltaTime * speed * glm::normalize(glm::cross(PlayerOrientation, Up));
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) // up
 	{
@@ -92,55 +77,58 @@ void Player::Controller(GLFWwindow* window, float deltaTime)
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // down
 	{
-		PlayerPosition += deltaTime * speed * -Up;
-	} 
+		if (checkCollision(PlayerPosition))
+		{
+			PlayerPosition += deltaTime * speed * -Up;
+		}
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // sprint on
 	{
-		speed = speed * sprintSpeedMultiplier;
-	} 
+		speed = sprintSpeed;
+	}
 
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) // sprint off
 	{
 		speed = defaultSpeed;
 	}
-
+	previousPlayerPosition = PlayerPosition;
 
 	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
 	{
 		PlayerPosition.y = 5.0f;
 	}
 
-	//if (forwardheld && leftheld || forwardheld && rightheld || backwardheld && leftheld ||  backwardheld || rightheld)
+	//// checks if next position is illegal
+	//if (PlayerPosition.y < 0.0f)
 	//{
-	//	speed = speed / glm::sqrt(speed);
+	//	illegalPlayerPosition = true;
 	//}
 	//else
 	//{
-	//	speed = defaultSpeed;
+	//	illegalPlayerPosition = false;
 	//}
 
-	// gravity
-	float fallspeed = 3;
-	float velocity;
+	// checks if grounded
+	//if (PlayerPosition.y <= 0.0f)
+	//{
+	//	grounded = true;
+	//}
+	//else
+	//{
+	//	grounded = false;
+	//}
 
-	bool grounded{};
-	bool fallStarted{};
-	bool fallEnded{};
-
-	if (!grounded && PlayerPosition.y < 0.0f)
-	{
-		PlayerPosition.y = 0.0f;
-		grounded = true;
-	}
-	else
-	{
-		grounded = false;
-		speed = defaultSpeed / 2;
-		PlayerPosition += deltaTime * fallspeed * -Up;
-	}
-
-
+	//// stays on ground if grounded
+	//if (grounded)
+	//{
+	//	PlayerPosition = previousPlayerPosition;
+	//}
+	//else
+	//{
+	//	speed = defaultSpeed / 2;
+	//	PlayerPosition += deltaTime * fallspeed * -Up;
+	//}
 
 	// mouse input new
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); 	// hides mouse cursor
@@ -152,18 +140,19 @@ void Player::Controller(GLFWwindow* window, float deltaTime)
 
 	float rotX = sensitivity * (float)(mouseY - (height / 2)) / height; // Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
 	float rotY = sensitivity * (float)(mouseX - (width / 2)) / width; // and then "transforms" them into degrees
-	
+
 	glm::vec3 newOrientation = glm::rotate(CameraOrientation, glm::radians(-rotX), glm::normalize(glm::cross(CameraOrientation, Up))); // Calculates upcoming vertical change in the Orientation
 
-	if (!((glm::angle(newOrientation, Up) <= glm::radians(10.0f)) || glm::angle(newOrientation, -Up) <= glm::radians(10.0f))) // Decides whether or not 
+	if (!((glm::angle(newOrientation, Up) <= glm::radians(10.0f)) || glm::angle(newOrientation, -Up) <= glm::radians(10.0f))) // Decides whether or not
 	{																														// the next vertical Orientation is legal or not
-		CameraOrientation = newOrientation; 
+		CameraOrientation = newOrientation;
 	}
 
 	PlayerOrientation = glm::rotate(PlayerOrientation, glm::radians(-rotY), Up); // Rotates the Orientation left and right
 	CameraOrientation = glm::rotate(CameraOrientation, glm::radians(-rotY), Up); // some temporary fix so camera rotates with the body
 
 	glfwSetCursorPos(window, (width / 2), (height / 2)); // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
+
 	// mouse input old
 	//if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) // on mouse press
 	//{

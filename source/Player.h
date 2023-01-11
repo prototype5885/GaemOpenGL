@@ -9,7 +9,9 @@
 #include<glm/gtx/rotate_vector.hpp>
 #include<glm/gtx/vector_angle.hpp>
 
+
 #include"shaderClass.h"
+#include <algorithm>
 
 class Player
 {
@@ -35,8 +37,21 @@ class Player
 		// camera speed and mouse sensitivity
 		float defaultSpeed = 2.5f;
 		float speed = 2.5f;
-		float sprintSpeedMultiplier = 5.5f;
+		float sprintSpeed = speed * 2.0f;
 		float sensitivity = 100.0f;
+
+		// collision detection stuff
+		glm::vec3 previousPlayerPosition;
+		bool illegalPlayerPosition;
+
+		// gravity stuff
+		float fallspeed = 3;
+		
+		bool grounded{};
+
+		// acceleration
+		float accel = 0.0f;
+		//float playerSpeed;
 
 		// camera constructor to set up initial values
 		Player(int width, int height, glm::vec3 position);
