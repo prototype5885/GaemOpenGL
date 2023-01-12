@@ -14,7 +14,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
 
 # Fortran module files
 *.mod
@@ -23,7 +23,7 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
+#*.a
 
 # Executables
 *.exe
@@ -32,8 +32,8 @@
 
 .vs
 .vscode
-x64
-win32
+#x64
+#win32
 Debug
 opengl21
 opengl33
