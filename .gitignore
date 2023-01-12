@@ -35,8 +35,8 @@
 #x64
 #win32
 Debug
-opengl21
-opengl33
-opengl46
+#opengl21
+#opengl33
+#opengl46
 obj
 Release
