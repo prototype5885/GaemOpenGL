@@ -9,7 +9,6 @@
 
 
 
-
 // using declartion for cout, endl and string
 using namespace std;
 //using std::cout;
@@ -23,11 +22,6 @@ unsigned int vsync;
 unsigned int fullscreen;
 
 unsigned int AAsamples = 0;
-
-
-
-
-
 
 
 void game()
@@ -239,6 +233,7 @@ void checkIfConfigExists()
 int main()
 {
 	checkIfConfigExists();
+	soundtest();
 	game();
 	return 0;
 }
