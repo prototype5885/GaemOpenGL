@@ -2639,7 +2639,7 @@
 1661013524 source:f:\coding\c++\gaemopengl\source\stb.cpp
 	<stb/stb_image.h>
 
-1673382268 source:f:\coding\c++\gaemopengl\source\texture.cpp
+1673446664 source:f:\coding\c++\gaemopengl\source\texture.cpp
 	"Texture.h"
 
 1673224616 source:f:\coding\c++\gaemopengl\source\vao.cpp
@@ -2648,13 +2648,13 @@
 1673212058 source:f:\coding\c++\gaemopengl\source\vbo.cpp
 	"VBO.h"
 
-1673390676 source:f:\coding\c++\gaemopengl\source\main.cpp
+1673699144 source:f:\coding\c++\gaemopengl\source\main.cpp
 	"Model.h"
 	<iostream>
 	<fstream>
 	"Player.h"
 
-1673393254 f:\coding\c++\gaemopengl\source\player.h
+1673485200 f:\coding\c++\gaemopengl\source\player.h
 	<glad/glad.h>
 	<GLFW/glfw3.h>
 	<glm/glm.hpp>
@@ -2663,6 +2663,7 @@
 	<glm/gtx/rotate_vector.hpp>
 	<glm/gtx/vector_angle.hpp>
 	"shaderClass.h"
+	<algorithm>
 
 1672274688 f:\coding\c++\gaemopengl\source\obj_loader.h
 	<iostream>
@@ -2671,6 +2672,8 @@
 	<fstream>
 	<math.h>
 
-1673268910 source:f:\coding\c++\gaemopengl\source\player.cpp
+1673467532 source:f:\coding\c++\gaemopengl\source\player.cpp
 	"Player.h"
+	<iostream>
+	<cmath>
 

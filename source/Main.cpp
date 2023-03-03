@@ -101,7 +101,7 @@ void game()
 	// Load in a model
 	Model base("models/godottest/base.gltf");
 	Model basewall("models/godottest/basewall.gltf");
-	Model modeus("models/godottest/modeus.gltf");
+
 
 
 	// vsync
@@ -150,14 +150,14 @@ void game()
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);				// specify background color
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// clean the back buffer and depth buffer
 		player.updateMatrix(68.0f, 0.1f, 100.0f);				// updates and exports the camera matrix to the vertex shader, FOV, near and far plane
-
+		
 
 		player.CameraPosition = player.PlayerPosition;			// keeps the camera attached to the player
 		player.CameraPosition.y = player.PlayerPosition.y + playerHeight; // keeps the camera height on head level
 
 		base.Draw(shaderProgram, player);
 		basewall.Draw(shaderProgram, player);
-		modeus.Draw(shaderProgram, player);
+
 
 		// swap the back buffer with the front buffer
 		glfwSwapBuffers(window);
@@ -233,7 +233,6 @@ void checkIfConfigExists()
 int main()
 {
 	checkIfConfigExists();
-	soundtest();
 	game();
 	return 0;
 }
